@@ -62,7 +62,13 @@ const login = async (req, res, next) => {
 };
 
 const logout = (req, res) => {
-  res.cookie('jwt', '', { httpOnly: true, expires: new Date(0), path: '/' });
+  res.cookie('jwt', '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    expires: new Date(0),
+    path: '/'
+  });
   res.status(200).json({ message: 'Logged out' });
 };
 
